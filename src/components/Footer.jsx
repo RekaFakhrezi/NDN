@@ -3,17 +3,19 @@ export default function Footer() {
         <footer className="w-full mt-12">
 
             {/* === BAGIAN UTAMA FOOTER (Dark Gray dengan Top Border Merah) === */}
-            <div className="bg-[#1a1a1a] border-t-4 border-[#bd2828] pt-14 pb-12 px-6">
-                <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 text-white">
+            {/* Padding dibuat adaptif: lebih ramping di mobile, longgar di desktop */}
+            <div className="bg-[#1a1a1a] border-t-4 border-t-[#bd2828] pt-10 pb-8 md:pt-14 md:pb-12 px-4 md:px-6">
+                {/* Menggunakan kombinasi grid cerdas: 1 kolom di HP, 2 kolom di tablet, 12 kolom di desktop */}
+                <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-8 md:gap-6 lg:gap-8 text-white">
 
-                    {/* Kolom 1: Brand (Porsi Paling Lebar) */}
-                    <div className="md:col-span-4">
-                        <h2 className="text-xl font-serif font-bold mb-4">NDN: Nusantara Daily News</h2>
-                        <p className="text-gray-400 text-sm leading-relaxed mb-6 pr-4">
+                    {/* Kolom 1: Brand */}
+                    <div className="sm:col-span-2 md:col-span-4 space-y-4">
+                        <h2 className="text-lg md:text-xl font-serif font-bold tracking-wide">NDN: Nusantara Daily News</h2>
+                        <p className="text-gray-400 text-sm leading-relaxed max-w-md pr-2">
                             Sumber berita terpercaya yang menyajikan informasi mendalam dari seluruh pelosok Nusantara.
                         </p>
-                        {/* Ikon Sosmed (Gaya Outline Persegi) */}
-                        <div className="flex gap-3">
+                        {/* Ikon Sosmed */}
+                        <div className="flex gap-3 pt-2">
                             <button className="w-9 h-9 rounded border border-gray-600 flex items-center justify-center hover:bg-gray-700 hover:text-white text-gray-400 transition cursor-pointer">
                                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z" /></svg>
                             </button>
@@ -24,10 +26,9 @@ export default function Footer() {
                     </div>
 
                     {/* Kolom 2: Informasi */}
-                    <div className="md:col-span-2">
-                        {/* Judul dengan warna merah sesuai gambar */}
-                        <h3 className="text-[11px] font-bold text-[#d44c4c] tracking-[0.15em] mb-5 uppercase">Informasi</h3>
-                        <ul className="text-sm space-y-3 text-gray-300 font-medium">
+                    <div className="sm:col-span-1 md:col-span-2">
+                        <h3 className="text-[11px] font-bold text-[#d44c4c] tracking-[0.15em] mb-4 uppercase">Informasi</h3>
+                        <ul className="text-sm space-y-2.5 text-gray-300 font-medium">
                             <li><a href="#" className="hover:text-white transition">About NDN</a></li>
                             <li><a href="#" className="hover:text-white transition">Editorial Policy</a></li>
                             <li><a href="#" className="hover:text-white transition">Career</a></li>
@@ -35,9 +36,9 @@ export default function Footer() {
                     </div>
 
                     {/* Kolom 3: Bantuan */}
-                    <div className="md:col-span-2">
-                        <h3 className="text-[11px] font-bold text-[#d44c4c] tracking-[0.15em] mb-5 uppercase">Bantuan</h3>
-                        <ul className="text-sm space-y-3 text-gray-300 font-medium">
+                    <div className="sm:col-span-1 md:col-span-2">
+                        <h3 className="text-[11px] font-bold text-[#d44c4c] tracking-[0.15em] mb-4 uppercase">Bantuan</h3>
+                        <ul className="text-sm space-y-2.5 text-gray-300 font-medium">
                             <li><a href="#" className="hover:text-white transition">Privacy</a></li>
                             <li><a href="#" className="hover:text-white transition">Contact Us</a></li>
                             <li><a href="#" className="hover:text-white transition">FAQ</a></li>
@@ -45,28 +46,30 @@ export default function Footer() {
                     </div>
 
                     {/* Kolom 4: Newsletter */}
-                    <div className="md:col-span-4">
-                        <h3 className="text-[11px] font-bold text-[#d44c4c] tracking-[0.15em] mb-5 uppercase">Newsletter</h3>
-                        <p className="text-sm text-gray-400 mb-4 leading-relaxed">Dapatkan ringkasan berita terbaik setiap pagi.</p>
-                        <div className="flex h-[42px]">
+                    <div className="sm:col-span-2 md:col-span-4 space-y-3">
+                        <h3 className="text-[11px] font-bold text-[#d44c4c] tracking-[0.15em] mb-2 uppercase">Newsletter</h3>
+                        <p className="text-sm text-gray-400 leading-relaxed">Dapatkan ringkasan berita terbaik setiap pagi.</p>
+                        <div className="flex h-[42px] max-w-md">
                             <input
                                 type="email"
                                 placeholder="Email Anda"
                                 className="bg-[#2c2c2c] text-white px-4 text-sm w-full outline-none rounded-l-md border border-transparent focus:border-red-500 transition"
                             />
-                            <button className="bg-[#bd2828] text-white px-6 text-sm font-bold hover:bg-red-800 transition rounded-r-md">
+                            <button className="bg-[#bd2828] text-white px-6 text-sm font-bold hover:bg-red-800 transition rounded-r-md cursor-pointer shrink-0">
                                 Ikuti
                             </button>
                         </div>
                     </div>
+
                 </div>
             </div>
 
             {/* === BOTTOM BAR (Hitam Pekat / Pure Black) === */}
-            <div className="bg-[#0a0a0a] py-5 px-6">
-                <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-[11.5px] text-gray-500 font-medium tracking-wide">
+            <div className="bg-[#0a0a0a] py-5 px-4 md:px-6">
+                {/* Flex direction otomatis menumpuk vertikal di mobile, sejajar di desktop */}
+                <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-[11px] md:text-[11.5px] text-gray-500 font-medium tracking-wide text-center md:text-left gap-3 md:gap-0">
                     <p>© 2024 Nusantara Daily News. Suara Rakyat, Kebanggaan Bangsa.</p>
-                    <div className="flex gap-6 mt-3 md:mt-0">
+                    <div className="flex gap-6 sm:gap-8">
                         <a href="#" className="hover:text-gray-300 transition">Syarat & Ketentuan</a>
                         <a href="#" className="hover:text-gray-300 transition">Kebijakan Cookie</a>
                     </div>
