@@ -25,7 +25,6 @@ export default function App() {
         <Route path="/my-articles" element={<MyArticles />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/notifications" element={<Notifications />} /> {/* Rute baru */}
-        <Route path="/add-dummy-data" element={<AddDummyData />} /> {/* Rute untuk tambah data dummy */}
       </Routes>
 
       <Footer />
