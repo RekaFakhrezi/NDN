@@ -6,8 +6,7 @@ import AdminOverview from "./pages/AdminOverview";
 import Login from "./pages/Login";
 import MyArticles from "./pages/MyArticles";
 import Profile from "./pages/Profile";
-import Notifications from "./pages/Notifications"; // Import halaman notifikasi baru
-import AddDummyData from "./pages/AddDummyData"; // Import halaman tambah data dummy
+import Notifications from "./pages/Notifications";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
