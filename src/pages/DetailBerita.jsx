@@ -152,7 +152,7 @@ export default function DetailBerita() {
         if (!imagePath) return "https://images.unsplash.com/photo-1541876751093-68d6d67b7891?q=80&w=1200";
         if (imagePath.startsWith("http")) return imagePath;
         const cleanPath = imagePath.startsWith("articles/") ? imagePath : `articles/${imagePath}`;
-        return `https://qwhetscllvvbyufzeeyy.supabase.co/storage/v1/object/public/Article-Image/${cleanPath}`;
+        return `https://kbahpvjqnvujodhaauyn.supabase.co/storage/v1/object/public/REACT_NDN/${cleanPath}`;
     };
 
     const formatDate = (isoString) => {

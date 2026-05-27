@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom"; // Tambahkan useLocation
 import { supabase } from "../lib/supabase";
 
 export default function Navbar() {
     const [user, setUser] = useState(null);
     const [isAdmin, setIsAdmin] = useState(false);
     const [unreadCount, setUnreadCount] = useState(0);
-    const [isMenuOpen, setIsMenuOpen] = useState(false); // State baru untuk mengontrol laci menu HP
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation(); // Inisialisasi radar halaman
 
     const fetchUserExtraData = async (sessionUser) => {
         if (!sessionUser) {
@@ -68,7 +69,7 @@ export default function Navbar() {
             <nav className="bg-[#bd2828] text-white px-4 md:px-6 py-3">
                 <div className="max-w-7xl mx-auto flex items-center justify-between">
 
-                    {/* LOGO (Ukuran teks mengecil otomatis di HP) */}
+                    {/* LOGO */}
                     <Link to="/" onClick={() => setIsMenuOpen(false)} className="flex flex-col shrink-0">
                         <span className="text-xl md:text-2xl font-serif font-bold leading-none tracking-wider">
                             NDN
@@ -78,13 +79,13 @@ export default function Navbar() {
                         </span>
                     </Link>
 
-                    {/* SEARCH BAR (Hanya muncul di Desktop / Laptop) */}
+                    {/* SEARCH BAR (Desktop) */}
                     <div className="hidden md:flex flex-1 max-w-md mx-8 relative">
                         <input type="text" placeholder="Cari berita di NDN..." className="w-full bg-[#a31d1d] text-white placeholder-red-300 text-sm rounded-md py-2 px-10 focus:outline-none focus:ring-1 focus:ring-white/50 border border-[#a31d1d]" />
                         <svg className="w-4 h-4 absolute left-3 top-2.5 text-red-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                     </div>
 
-                    {/* MENU UTAMA (Hanya muncul di Desktop / Laptop) */}
+                    {/* MENU UTAMA (Desktop) */}
                     <div className="hidden md:flex items-center gap-6 text-sm font-medium">
                         <Link to="/" className="hover:text-red-200 transition">Home</Link>
 
@@ -115,9 +116,8 @@ export default function Navbar() {
                         )}
                     </div>
 
-                    {/* KELOMPOK MENU MOBILE (Hanya muncul di layar HP) */}
+                    {/* KELOMPOK MENU MOBILE */}
                     <div className="flex items-center gap-4 md:hidden">
-                        {/* Lonceng Notifikasi tetap ditaruh di luar laci biar user gampang ngeklik */}
                         <Link to={user ? "/notifications" : "/login"} onClick={() => setIsMenuOpen(false)} className="hover:text-red-200 relative p-1 transition" title="Pusat Notifikasi">
                             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
                             {unreadCount > 0 && (
@@ -127,7 +127,6 @@ export default function Navbar() {
                             )}
                         </Link>
 
-                        {/* TOMBOL UTAMA HAMBURGER */}
                         <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-1 focus:outline-none text-white hover:text-red-200 transition" aria-label="Toggle Menu">
                             {isMenuOpen ? (
                                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
@@ -142,7 +141,6 @@ export default function Navbar() {
                 {/* LACI DROPDOWN MENU INTERAKTIF DI HP */}
                 {isMenuOpen && (
                     <div className="md:hidden bg-[#bd2828] border-t border-red-700/50 px-4 pt-2 pb-4 flex flex-col gap-3 text-sm font-medium animate-in fade-in slide-in-from-top-2 duration-200">
-                        {/* Kolom Search khusus versi Mobile */}
                         <div className="relative w-full my-1">
                             <input type="text" placeholder="Cari berita di NDN..." className="w-full bg-[#a31d1d] text-white placeholder-red-300 text-xs rounded-md py-2.5 pl-10 pr-4 focus:outline-none border border-[#a31d1d]" />
                             <svg className="w-4 h-4 absolute left-3 top-3 text-red-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
@@ -180,13 +178,15 @@ export default function Navbar() {
                 )}
             </nav>
 
-            {/* BREAKING NEWS BAR (Teks dipastikan tidak turun merusak layout) */}
-            <div className="bg-[#991b1b] text-white text-[10px] md:text-xs py-2 px-4 md:px-6 flex items-center">
-                <div className="max-w-7xl mx-auto w-full flex items-center gap-3 md:gap-4 overflow-hidden">
-                    <span className="font-bold bg-[#7f1d1d] px-2 py-0.5 rounded shrink-0 tracking-wide">BREAKING:</span>
-                    <p className="truncate opacity-90 whitespace-nowrap">Ibukota Nusantara Siap Diresmikan Bulan Depan. • Presiden Kunjungi Papua Untuk Proyek Strategis. • Kurs Rupiah Menguat Terhadap Dollar AS. • NDN</p>
+            {/* LOGIKA CONDITIONAL RENDERING HANYA UNTUK HOMEPAGE */}
+            {location.pathname === "/" && (
+                <div className="bg-[#991b1b] text-white text-[10px] md:text-xs py-2 px-4 md:px-6 flex items-center">
+                    <div className="max-w-7xl mx-auto w-full flex items-center gap-3 md:gap-4 overflow-hidden">
+                        <span className="font-bold bg-[#7f1d1d] px-2 py-0.5 rounded shrink-0 tracking-wide">BREAKING:</span>
+                        <p className="truncate opacity-90 whitespace-nowrap">Ibukota Nusantara Siap Diresmikan Bulan Depan. • Presiden Kunjungi Papua Untuk Proyek Strategis. • Kurs Rupiah Menguat Terhadap Dollar AS. • NDN</p>
+                    </div>
                 </div>
-            </div>
+            )}
         </header>
     );
 }

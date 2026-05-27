@@ -82,8 +82,9 @@ export default function SubmitBerita() {
                 const uniqueFileName = `${Date.now()}_${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
                 const filePath = `articles/${uniqueFileName}`;
 
+                // MENGUBAH TARGET BUCKET MENJADI REACT_NDN
                 const { error: uploadError } = await supabase.storage
-                    .from("Article-Image")
+                    .from("REACT_NDN")
                     .upload(filePath, imageFile, {
                         cacheControl: '3600',
                         upsert: false
@@ -166,7 +167,6 @@ export default function SubmitBerita() {
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
 
-                    {/* FORM INPUT */}
                     <form onSubmit={handleSubmit} className="lg:col-span-2 bg-white p-4 sm:p-6 rounded-xl border border-gray-200 shadow-sm space-y-5 md:space-y-6">
 
                         <div>
@@ -196,7 +196,6 @@ export default function SubmitBerita() {
                             </select>
                         </div>
 
-                        {/* AREA UPLOAD GAMBAR BARU */}
                         <div>
                             <label className="block text-[11px] md:text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5 md:mb-2">Unggah Gambar Utama (Opsional)</label>
                             <div className="relative border-2 border-dashed border-gray-300 rounded-md bg-gray-50 hover:bg-gray-100 transition cursor-pointer flex flex-col items-center justify-center p-4 sm:p-6 min-h-[140px] overflow-hidden text-center">
@@ -250,7 +249,6 @@ export default function SubmitBerita() {
 
                     </form>
 
-                    {/* ASIDE PANDUAN */}
                     <div className="space-y-4 md:space-y-6">
                         <div className="bg-white p-4 md:p-5 rounded-xl border border-gray-200 shadow-sm">
                             <h3 className="font-serif font-bold text-base md:text-lg text-gray-900 border-b pb-2 md:pb-3 mb-3 md:mb-4 flex items-center gap-2">
