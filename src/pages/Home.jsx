@@ -1,12 +1,18 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 
 export default function Home() {
     const [articles, setArticles] = useState([]);
     const [categories, setCategories] = useState([]);
     const [activeCategory, setActiveCategory] = useState("Semua");
-    const [searchQuery, setSearchQuery] = useState("");
+    const [searchParams] = useSearchParams();
+    const [searchQuery, setSearchQuery] = useState(searchParams.get("cari") || "");
+
+    // Mengawasi URL: Jika user mengetik pencarian baru di Navbar saat sedang berada di halaman Home
+    useEffect(() => {
+        setSearchQuery(searchParams.get("cari") || "");
+    }, [searchParams]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -62,6 +68,7 @@ export default function Home() {
 
     const heroArticle = filteredArticles.length > 0 ? filteredArticles[0] : null;
     const gridArticles = filteredArticles.length > 1 ? filteredArticles.slice(1) : filteredArticles;
+
     // Hitung jumlah artikel per kategori untuk mencari Top 3
     const categoryCounts = {};
     articles.forEach(art => {
@@ -93,16 +100,13 @@ export default function Home() {
 
             {/* === HEADLINE UTAMA (HERO SECTION FULL WIDTH & CLICKABLE) === */}
             {heroArticle && !searchQuery ? (
-                /* Pembungkus luar menggunakan Link agar SELURUH GAMBAR bisa diklik */
                 <Link
                     to={`/artikel/${heroArticle.id}`}
                     className="relative block w-full h-[55vh] sm:h-[65vh] md:h-[80vh] overflow-hidden group mb-8 md:mb-12 cursor-pointer shadow-xl"
                 >
-                    {/* GAMBAR DIAM: Animasi Hover/Gerak/Zoom dihapus agar elegan dan tidak bikin pusing */}
                     <img src={getImageUrl(heroArticle.image)} alt={heroArticle.title} className="absolute inset-0 w-full h-full object-cover" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent"></div>
 
-                    {/* Pembatas lebar agar teks judul tetap sejajar ke tengah, tidak ikut mentok ke ujung layar */}
                     <div className="absolute bottom-0 left-0 w-full">
                         <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-8 md:pb-16 w-full text-white">
                             <div className="md:w-3/4">
@@ -110,7 +114,7 @@ export default function Home() {
                                     {heroArticle.categories?.name || "BERITA UTAMA"}
                                 </span>
 
-                                <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-serif font-bold leading-tight mb-3 md:mb-4 line-clamp-3 md:line-clamp-none drop-shadow-lg group-hover:text-red-100 transition-colors">
+                                <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-serif font-bold leading-tight mb-3 md:mb-4 line-clamp-3 md:line-clamp-none drop-shadow-lg group-hover:text-white-100 transition-colors">
                                     {heroArticle.title}
                                 </h1>
 
@@ -122,8 +126,7 @@ export default function Home() {
                                     <span>{formatDate(heroArticle.created_at)}</span>
                                 </div>
 
-                                {/* Tombol dirubah jadi elemen span agar aman dipakai di dalam tag Link */}
-                                <span className="bg-white text-gray-900 px-5 py-2.5 md:px-7 md:py-3.5 rounded text-xs md:text-sm font-bold group-hover:bg-red-50 group-hover:text-[#bd2828] transition-all duration-300 shadow-lg inline-block transform active:scale-95">
+                                <span className="bg-white text-gray-900 px-5 py-2.5 md:px-7 md:py-3.5 rounded text-xs md:text-sm font-bold group-hover:bg-white-50 group-hover:text-[#bd2828] transition-all duration-300 shadow-lg inline-block transform active:scale-95">
                                     Baca Selengkapnya →
                                 </span>
                             </div>
@@ -153,7 +156,7 @@ export default function Home() {
                     </div>
 
                     {/* Deretan Tombol Tab Kategori & Dropdown */}
-                    <div className="flex items-center gap-2 overflow-x-auto w-full no-scrollbar">
+                    <div className="flex items-center justify-start lg:justify-end gap-2 overflow-x-auto w-full no-scrollbar">
                         <button
                             onClick={() => setActiveCategory("Semua")}
                             className={`whitespace-nowrap px-4 py-1.5 md:py-2 rounded-full text-xs md:text-sm font-bold transition shadow-sm border cursor-pointer ${activeCategory === "Semua" ? "bg-[#a31d1d] text-white border-[#a31d1d]" : "bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100"}`}
@@ -192,6 +195,47 @@ export default function Home() {
                         )}
                     </div>
                 </div>
+
+                {/* === GRID LIST ARTIKEL BERITA === */}
+                {filteredArticles.length === 0 ? (
+                    <div className="text-center py-16 md:py-20 bg-white border border-gray-200 rounded-xl px-4 shadow-sm">
+                        <p className="text-gray-400 text-sm md:text-base font-medium">Tidak ada artikel berita yang cocok dengan kata kunci atau kategori tersebut.</p>
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                        {(searchQuery ? filteredArticles : gridArticles).map((article) => (
+                            <div key={article.id} className="bg-white rounded-xl shadow-sm border border-gray-100 transition duration-300 flex flex-col overflow-hidden group">
+
+                                {/* Frame Gambar Berita tanpa animasi scale/zoom */}
+                                <div className="relative h-44 md:h-48 overflow-hidden bg-gray-100 shrink-0">
+                                    <img src={getImageUrl(article.image)} alt={article.title} className="w-full h-full object-cover" />
+                                    <span className="absolute top-3 left-3 bg-white/90 text-[#a31d1d] text-[9px] font-extrabold px-2.5 py-1 rounded uppercase tracking-widest shadow-sm backdrop-blur-sm">
+                                        {article.categories?.name || "BERITA"}
+                                    </span>
+                                </div>
+
+                                <div className="p-4 md:p-5 flex-1 flex flex-col justify-between space-y-4">
+                                    <div className="space-y-2">
+                                        <h3 className="font-serif font-bold text-lg md:text-xl text-gray-900 leading-snug line-clamp-2 group-hover:text-[#a31d1d] transition">
+                                            {article.title}
+                                        </h3>
+                                        <p className="text-xs md:text-sm text-gray-500 line-clamp-2 leading-relaxed">
+                                            {article.content.replace(/<[^>]+>/g, '')}
+                                        </p>
+                                    </div>
+
+                                    <div className="flex justify-between items-center border-t border-gray-50 pt-3 mt-2 shrink-0">
+                                        <span className="text-[10px] md:text-[11px] font-bold text-gray-400">{formatDate(article.created_at)}</span>
+                                        <Link to={`/artikel/${article.id}`} className="text-[#a31d1d] text-[11px] font-bold flex items-center gap-1 hover:underline">
+                                            Baca <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                        </Link>
+                                    </div>
+                                </div>
+
+                            </div>
+                        ))}
+                    </div>
+                )}
 
             </div>
         </div>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom"; // Tambahkan useLocation
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 
 export default function Navbar() {
@@ -7,8 +7,12 @@ export default function Navbar() {
     const [isAdmin, setIsAdmin] = useState(false);
     const [unreadCount, setUnreadCount] = useState(0);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    
+    // State baru untuk menyimpan teks yang diketik di search bar
+    const [searchTerm, setSearchTerm] = useState(""); 
+    
     const navigate = useNavigate();
-    const location = useLocation(); // Inisialisasi radar halaman
+    const location = useLocation();
 
     const fetchUserExtraData = async (sessionUser) => {
         if (!sessionUser) {
@@ -64,6 +68,17 @@ export default function Navbar() {
         navigate("/login");
     };
 
+    // Fungsi untuk memproses pencarian saat tombol Enter ditekan
+    const handleSearch = (e) => {
+        e.preventDefault();
+        if (searchTerm.trim()) {
+            navigate(`/?cari=${encodeURIComponent(searchTerm.trim())}`);
+        } else {
+            navigate(`/`);
+        }
+        setIsMenuOpen(false); // Tutup menu mobile jika search dilakukan dari HP
+    };
+
     return (
         <header className="sticky top-0 z-50 w-full shadow-md">
             <nav className="bg-[#bd2828] text-white px-4 md:px-6 py-3">
@@ -80,10 +95,16 @@ export default function Navbar() {
                     </Link>
 
                     {/* SEARCH BAR (Desktop) */}
-                    <div className="hidden md:flex flex-1 max-w-md mx-8 relative">
-                        <input type="text" placeholder="Cari berita di NDN..." className="w-full bg-[#a31d1d] text-white placeholder-red-300 text-sm rounded-md py-2 px-10 focus:outline-none focus:ring-1 focus:ring-white/50 border border-[#a31d1d]" />
+                    <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-md mx-8 relative">
+                        <input 
+                            type="text" 
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            placeholder="Cari berita di NDN..." 
+                            className="w-full bg-[#a31d1d] text-white placeholder-red-300 text-sm rounded-md py-2 px-10 focus:outline-none focus:ring-1 focus:ring-white/50 border border-[#a31d1d]" 
+                        />
                         <svg className="w-4 h-4 absolute left-3 top-2.5 text-red-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                    </div>
+                    </form>
 
                     {/* MENU UTAMA (Desktop) */}
                     <div className="hidden md:flex items-center gap-6 text-sm font-medium">
@@ -141,10 +162,18 @@ export default function Navbar() {
                 {/* LACI DROPDOWN MENU INTERAKTIF DI HP */}
                 {isMenuOpen && (
                     <div className="md:hidden bg-[#bd2828] border-t border-red-700/50 px-4 pt-2 pb-4 flex flex-col gap-3 text-sm font-medium animate-in fade-in slide-in-from-top-2 duration-200">
-                        <div className="relative w-full my-1">
-                            <input type="text" placeholder="Cari berita di NDN..." className="w-full bg-[#a31d1d] text-white placeholder-red-300 text-xs rounded-md py-2.5 pl-10 pr-4 focus:outline-none border border-[#a31d1d]" />
+                        
+                        {/* SEARCH BAR (Mobile) */}
+                        <form onSubmit={handleSearch} className="relative w-full my-1">
+                            <input 
+                                type="text" 
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                placeholder="Cari berita di NDN..." 
+                                className="w-full bg-[#a31d1d] text-white placeholder-red-300 text-xs rounded-md py-2.5 pl-10 pr-4 focus:outline-none border border-[#a31d1d]" 
+                            />
                             <svg className="w-4 h-4 absolute left-3 top-3 text-red-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                        </div>
+                        </form>
 
                         <Link to="/" onClick={() => setIsMenuOpen(false)} className="hover:bg-red-700/40 px-3 py-2 rounded transition">Home</Link>
 
